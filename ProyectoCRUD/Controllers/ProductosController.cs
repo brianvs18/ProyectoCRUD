@@ -15,6 +15,7 @@ namespace ProyectoCRUD.Controllers
         //Conexion a la BD
         private readonly DbContextProyecto _context;
 
+        //Inyeccion de la Clase DbContextProyecto
         public ProductosController(DbContextProyecto context)
         {
             _context = context;
