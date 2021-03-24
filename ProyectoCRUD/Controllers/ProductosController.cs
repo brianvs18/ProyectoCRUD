@@ -42,7 +42,7 @@ namespace ProyectoCRUD.Controllers
              }            
              //return View(await _context.Productos.ToListAsync());*/
 
-            var productos = await _context.Productos.Include(x => x.TipoProducto).ToListAsync();
+            var productos = await _context.Productos.Include("TipoProducto").ToListAsync();
 
             return View(productos);
         }
@@ -68,6 +68,8 @@ namespace ProyectoCRUD.Controllers
         // GET: Productos/Create
         public IActionResult Crear()
         {
+            ViewData["TipoProducto"] = new SelectList(_context.TipoProductos.ToList(), "TipoProductoId", "Nombre");//error cuando se comete el error
+
             return View();
         }
 
@@ -100,6 +102,9 @@ namespace ProyectoCRUD.Controllers
             {
                 return NotFound();
             }
+
+            ViewData["TipoProducto"] = new SelectList(_context.TipoProductos.ToList(), "TipoProductoId", "Nombre");
+
             return View(producto);
         }
 
