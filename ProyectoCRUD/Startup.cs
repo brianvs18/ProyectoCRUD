@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ProyectoCRUD.Models.Abstract;
+using ProyectoCRUD.Models.Business;
 using ProyectoCRUD.Models.DAL;
 using System;
 using System.Collections.Generic;
@@ -29,6 +31,9 @@ namespace ProyectoCRUD
             //Servicio para usar BD global en el proyecto
             var conexion = Configuration["ConnectionStrings:conexion_sqlserver"];
             services.AddDbContext<DbContextProyecto>(options => options.UseSqlServer(conexion));
+
+            services.AddScoped<IProductoBusiness, ProductoBusiness>();// creando un angular
+
             //Actualizacion en tiempo real
             services.AddRazorPages().AddRazorRuntimeCompilation();
         }

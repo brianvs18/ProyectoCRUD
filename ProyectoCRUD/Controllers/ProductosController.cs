@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ProyectoCRUD.Models.Abstract;
+using ProyectoCRUD.Models.Business;
 using ProyectoCRUD.Models.DAL;
 using ProyectoCRUD.Models.Entities;
 using ProyectoCRUD.ViewModels;
@@ -13,21 +15,21 @@ namespace ProyectoCRUD.Controllers
 {
     public class ProductosController : Controller
     {
+        
+
         //Conexion a la BD
-        private readonly DbContextProyecto _context;
+        private readonly IProductoBusiness _productoBusiness;
 
         //Inyeccion de la Clase DbContextProyecto
-        public ProductosController(DbContextProyecto context)
+        public ProductosController(IProductoBusiness productoBusiness)
         {
-            _context = context;
+            _productoBusiness = productoBusiness;
         }
 
         // GET: Productos
         public async Task<IActionResult> Index()
         {
-            var productos = await _context.Productos.Include("TipoProducto").ToListAsync();
-
-            return View(productos);
+            return View(await _productoBusiness.ObtenerProductos());
         }
 
         // GET: Productos/Details/5
@@ -38,8 +40,8 @@ namespace ProyectoCRUD.Controllers
                 return NotFound();
             }
 
-            var producto = await _context.Productos
-                .FirstOrDefaultAsync(m => m.ProductoId == id);
+            var producto = await _productoBusiness.ObtenerProductoPorId(id.Value);
+
             if (producto == null)
             {
                 return NotFound();
@@ -47,7 +49,7 @@ namespace ProyectoCRUD.Controllers
 
             return View(producto);
         }
-
+        /*
         // GET: Productos/Create
         public IActionResult Crear()
         {
@@ -71,6 +73,7 @@ namespace ProyectoCRUD.Controllers
             }
             return View(producto);
         }
+        */
 
         // GET: Productos/Edit/5
         public async Task<IActionResult> Modificar(int? id)
@@ -90,7 +93,7 @@ namespace ProyectoCRUD.Controllers
 
             return View(producto);
         }
-
+        /*
         // POST: Productos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -158,6 +161,6 @@ namespace ProyectoCRUD.Controllers
         private bool ProductoExists(int id)
         {
             return _context.Productos.Any(e => e.ProductoId == id);
-        }
+        }*/
     }
 }
