@@ -25,22 +25,26 @@ namespace ProyectoCRUD.Controllers
         // GET: Productos
         public async Task<IActionResult> Index()
         {
-            await using (_context)
-            {
-                IEnumerable<ProductoModel> listaProductos = (from producto in _context.Productos
-                                                             join tipo in _context.TipoProductos
-                                                             on producto.TipoProductoId equals tipo.TipoProductoId
-                                                             select new ProductoModel
-                                                             {
-                                                                 ProductoId = producto.ProductoId,
-                                                                 Nombre = producto.Nombre,
-                                                                 Cantidad = producto.Cantidad,
-                                                                 Precio = producto.Precio,
-                                                                 TipoProducto = tipo.Nombre
-                                                             }).ToList();
-                return View(listaProductos);
-            }            
-            //return View(await _context.Productos.ToListAsync());
+            /* await using (_context)
+             {
+                 IEnumerable<ProductoModel> listaProductos = (from producto in _context.Productos
+                                                              join tipo in _context.TipoProductos
+                                                              on producto.TipoProductoId equals tipo.TipoProductoId
+                                                              select new ProductoModel
+                                                              {
+                                                                  ProductoId = producto.ProductoId,
+                                                                  Nombre = producto.Nombre,
+                                                                  Cantidad = producto.Cantidad,
+                                                                  Precio = producto.Precio,
+                                                                  TipoProducto = tipo.Nombre
+                                                              }).ToList();
+                 return View(listaProductos);
+             }            
+             //return View(await _context.Productos.ToListAsync());*/
+
+            var productos = await _context.Productos.Include(x => x.TipoProducto).ToListAsync();
+
+            return View(productos);
         }
 
         // GET: Productos/Details/5

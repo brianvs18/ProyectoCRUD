@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProyectoCRUD.ViewModels.ProductoModel>
+﻿@model IEnumerable<ProyectoCRUD.Models.Entities.Producto>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TipoProducto)
+                @Html.DisplayNameFor(model => model.TipoProducto.Nombre)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Cantidad)
@@ -34,7 +34,7 @@
                 @Html.DisplayFor(modelItem => item.Nombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TipoProducto)
+                @Html.DisplayFor(modelItem => item.TipoProducto.Nombre)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Cantidad)
