@@ -49,15 +49,15 @@ namespace ProyectoCRUD.Controllers
 
             return View(producto);
         }
-        /*
+        
         // GET: Productos/Create
         public IActionResult Crear()
         {
-            ViewData["TipoProducto"] = new SelectList(_context.TipoProductos.ToList(), "TipoProductoId", "Nombre");//error cuando se comete el error
+            ViewData["TipoProducto"] = new SelectList( _productoBusiness.ObtenerListaTipoProductos(), "TipoProductoId", "Nombre");
 
             return View();
         }
-
+        
         // POST: Productos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -67,14 +67,17 @@ namespace ProyectoCRUD.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(producto);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var productoTemp = await _productoBusiness.ObtenerProductoPorId(producto.ProductoId);
+                if (productoTemp == null)
+                {
+                    await _productoBusiness.GuardarProducto(producto);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(producto);
         }
-        */
-
+        
+        /*
         // GET: Productos/Edit/5
         public async Task<IActionResult> Modificar(int? id)
         {

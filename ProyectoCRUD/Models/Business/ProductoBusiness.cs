@@ -29,12 +29,16 @@ namespace ProyectoCRUD.Models.Business
             return (await _context.Productos.FirstOrDefaultAsync(m => m.ProductoId == id));
         }
 
-        /*public async Task<IEnumerable<Producto>> ObtenerListaProductos()
+        public IEnumerable<TipoProducto> ObtenerListaTipoProductos()
         {
-            return (SelectList(_context.TipoProductos.ToList(), "TipoProductoId", "Nombre"));
-        }*/
+            return _context.TipoProductos.ToList();
+        }
 
-
+        public async Task GuardarProducto(Producto producto)
+        {
+            _context.Add(producto);
+            await _context.SaveChangesAsync();
+        }
         
 
     }
