@@ -39,7 +39,24 @@ namespace ProyectoCRUD.Models.Business
             _context.Add(producto);
             await _context.SaveChangesAsync();
         }
-        
 
+        public async Task EditarProducto(Producto producto)
+        {
+            _context.Update(producto);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ELiminarpProducto(Producto producto)
+        {
+            try
+            {
+                _context.Productos.Remove(producto);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }

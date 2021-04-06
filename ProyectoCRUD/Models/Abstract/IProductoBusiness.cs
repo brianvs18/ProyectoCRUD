@@ -12,5 +12,7 @@ namespace ProyectoCRUD.Models.Abstract
         Task<Producto> ObtenerProductoPorId(int id);
         IEnumerable<TipoProducto> ObtenerListaTipoProductos();
         Task GuardarProducto(Producto producto);
+        Task EditarProducto(Producto producto);
+        Task ELiminarpProducto(Producto producto);
     }
 }

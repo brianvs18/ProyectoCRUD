@@ -74,10 +74,18 @@ namespace ProyectoCRUD.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
+
+            if (producto.TipoProductoId == 0)
+            {
+                ViewData["errorProducto"] = "seleccione un tipo de producto";
+            }
+
+            ViewData["listaProducto"] = new SelectList(_productoBusiness.ObtenerListaTipoProductos(), "TipoProductoId", "Nombre"); 
+
             return View(producto);
         }
         
-        /*
+        
         // GET: Productos/Edit/5
         public async Task<IActionResult> Modificar(int? id)
         {
@@ -86,17 +94,15 @@ namespace ProyectoCRUD.Controllers
                 return NotFound();
             }
 
-            var producto = await _context.Productos.FindAsync(id);
+            var producto = await _productoBusiness.ObtenerProductoPorId(id.Value);
             if (producto == null)
             {
                 return NotFound();
             }
 
-            ViewData["TipoProducto"] = new SelectList(_context.TipoProductos.ToList(), "TipoProductoId", "Nombre");
-
             return View(producto);
         }
-        /*
+        
         // POST: Productos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -111,27 +117,14 @@ namespace ProyectoCRUD.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(producto);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductoExists(producto.ProductoId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _productoBusiness.EditarProducto(producto);
                 return RedirectToAction(nameof(Index));
             }
+            
+
             return View(producto);
         }
-
+        
         // GET: Productos/Delete/5
         public async Task<IActionResult> Eliminar(int? id)
         {
@@ -139,17 +132,18 @@ namespace ProyectoCRUD.Controllers
             {
                 return NotFound();
             }
+            var producto = await _productoBusiness.ObtenerProductoPorId(id.Value);
 
-            var producto = await _context.Productos
-                .FirstOrDefaultAsync(m => m.ProductoId == id);
+            await _productoBusiness.ELiminarpProducto(producto);
+            
             if (producto == null)
             {
                 return NotFound();
             }
 
-            return View(producto);
+            return RedirectToAction(nameof(Index));
         }
-
+        /*
         // POST: Productos/Delete/5
         [HttpPost, ActionName("Eliminar")]
         [ValidateAntiForgeryToken]
