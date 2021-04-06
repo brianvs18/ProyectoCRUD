@@ -15,8 +15,6 @@ namespace ProyectoCRUD.Controllers
 {
     public class ProductosController : Controller
     {
-        
-
         //Conexion a la BD
         private readonly IProductoBusiness _productoBusiness;
 
