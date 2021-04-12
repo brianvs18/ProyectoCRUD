@@ -111,26 +111,32 @@ namespace ProyectoCRUD.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var productoTemp = await _context.Productos.AsNoTracking().FirstOrDefaultAsync(prod => prod.ProductoId == producto.ProductoId);
+
+
+            if (productoTemp == null || (productoTemp.ProductoId == producto.ProductoId))
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(producto);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductoExists(producto.ProductoId))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(producto);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!ProductoExists(producto.ProductoId))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
-            }
+            }            
             return View(producto);
         }
 
