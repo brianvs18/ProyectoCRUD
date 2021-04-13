@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ProyectoCRUD.Models.Abstract;
 using ProyectoCRUD.Models.DAL;
 using ProyectoCRUD.Models.Entities;
 
@@ -12,17 +13,17 @@ namespace ProyectoCRUD.Controllers
 {
     public class TipoProductosController : Controller
     {
-        private readonly DbContextProyecto _context;
+        private readonly ITipoProductoServices _tipoProductoServices;
 
-        public TipoProductosController(DbContextProyecto context)
+        public TipoProductosController(ITipoProductoServices tipoProductoServices)
         {
-            _context = context;
+            _tipoProductoServices = tipoProductoServices;
         }
 
         // GET: TipoProductos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TipoProductos.ToListAsync());
+            return View(await _tipoProductoServices.ListaTipoProductos());
         }
 
         // GET: TipoProductos/Details/5
@@ -33,8 +34,7 @@ namespace ProyectoCRUD.Controllers
                 return NotFound();
             }
 
-            var tipoProducto = await _context.TipoProductos
-                .FirstOrDefaultAsync(m => m.TipoProductoId == id);
+            var tipoProducto = await _tipoProductoServices.TipoProductoId(id.Value);
             if (tipoProducto == null)
             {
                 return NotFound();
@@ -56,8 +56,7 @@ namespace ProyectoCRUD.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tipoProducto);
-                await _context.SaveChangesAsync();
+                await _tipoProductoServices.GuardarTipoProducto(tipoProducto);
                 return RedirectToAction(nameof(Index));
             }
             return View(tipoProducto);
@@ -71,7 +70,7 @@ namespace ProyectoCRUD.Controllers
                 return NotFound();
             }
 
-            var tipoProducto = await _context.TipoProductos.FindAsync(id);
+            var tipoProducto = await _tipoProductoServices.TipoProductoId(id.Value);
             if (tipoProducto == null)
             {
                 return NotFound();
@@ -90,23 +89,8 @@ namespace ProyectoCRUD.Controllers
             }
 
             if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(tipoProducto);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TipoProductoExists(tipoProducto.TipoProductoId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+            {                                                 
+                await _tipoProductoServices.EditarTipoProducto(tipoProducto);                
                 return RedirectToAction(nameof(Index));
             }
             return View(tipoProducto);
@@ -120,21 +104,21 @@ namespace ProyectoCRUD.Controllers
                 return NotFound();
             }
 
-            var tipoProducto = await _context.TipoProductos
-                .FirstOrDefaultAsync(m => m.TipoProductoId == id);
+            var tipoProducto = await _tipoProductoServices.TipoProductoId(id.Value);
+            
             if (tipoProducto == null)
             {
                 return NotFound();
             }
 
-            _context.TipoProductos.Remove(tipoProducto);
-            await _context.SaveChangesAsync();
+            await _tipoProductoServices.EliminarTipoProducto(tipoProducto);
             return RedirectToAction(nameof(Index));
         }
-        
+        /*
         private bool TipoProductoExists(int id)
         {
             return _context.TipoProductos.Any(e => e.TipoProductoId == id);
         }
+        */
     }
 }
