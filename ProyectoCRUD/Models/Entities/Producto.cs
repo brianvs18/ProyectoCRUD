@@ -17,6 +17,7 @@ namespace ProyectoCRUD.Models.Entities
         [DisplayName("Tipo de Producto")]
         [Required(ErrorMessage = "El tipo de producto es obligatorio")]
         public int TipoProductoId { get; set; }
+        public virtual TipoProducto TipoProducto { get; set; }
 
         [Required(ErrorMessage = "La cantidad es obligatoria")]
         public int Cantidad { get; set; }

@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProyectoCRUD.Models.DAL;
 
 namespace ProyectoCRUD.Migrations
 {
     [DbContext(typeof(DbContextProyecto))]
-    partial class DbContextProyectoModelSnapshot : ModelSnapshot
+    [Migration("20210412044442_Llaves")]
+    partial class Llaves
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProyectoCRUD.ViewModels.ProductoModel>
+﻿@model IEnumerable<ProyectoCRUD.Models.Entities.Producto>
 
 @{
     ViewData["Title"] = "Index";
@@ -34,7 +34,7 @@
                 @Html.DisplayFor(modelItem => item.Nombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TipoProducto)
+                @Html.DisplayFor(modelItem => item.TipoProducto.Nombre)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Cantidad)
@@ -45,7 +45,7 @@
             <td>
                 <a asp-action="Modificar" asp-route-id="@item.ProductoId" class="btn btn-success"><i class="fas fa-edit"></i> Editar</a> |
                 <a asp-action="Detalle" asp-route-id="@item.ProductoId" class="btn btn-secondary"><i class="fas fa-info"></i> Detalles</a> |
-                <a asp-action="Eliminar" asp-route-id="@item.ProductoId" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Eliminar</a>
+                <a asp-action="Eliminar" asp-route-id="@item.ProductoId" class="btn btn-danger" onclick="return confirm('¿Desea eliminar este producto?')"><i class="fas fa-trash-alt"></i> Eliminar</a>
             </td>
         </tr>
 }

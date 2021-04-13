@@ -1,0 +1,35 @@
+﻿@model IEnumerable<ProyectoCRUD.Models.Entities.TipoProducto>
+
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="CrearTipoP" class="btn btn-outline-info"><i class="fas fa-plus-circle"> Nuevo Tipo de Producto</i></a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                <a asp-action="EditarTipoP" asp-route-id="@item.TipoProductoId" class="btn btn-success"><i class="fas fa-edit"></i> Editar</a> |
+                <a asp-action="DetallesTipoP" asp-route-id="@item.TipoProductoId" class="btn btn-secondary"><i class="fas fa-info"></i> Detalles</a> |
+                <a asp-action="EliminarTipoP" asp-route-id="@item.TipoProductoId" class="btn btn-danger" onclick="return confirm('¿Desea eliminar este Tipo de Producto?')"><i class="fas fa-trash-alt"></i> Borrar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

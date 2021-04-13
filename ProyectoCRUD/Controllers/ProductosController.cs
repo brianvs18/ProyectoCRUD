@@ -24,23 +24,11 @@ namespace ProyectoCRUD.Controllers
 
         // GET: Productos
         public async Task<IActionResult> Index()
-        {
-            await using (_context)
-            {
-                IEnumerable<ProductoModel> listaProductos = (from producto in _context.Productos
-                                                             join tipo in _context.TipoProductos
-                                                             on producto.TipoProductoId equals tipo.TipoProductoId
-                                                             select new ProductoModel
-                                                             {
-                                                                 ProductoId = producto.ProductoId,
-                                                                 Nombre = producto.Nombre,
-                                                                 Cantidad = producto.Cantidad,
-                                                                 Precio = producto.Precio,
-                                                                 TipoProducto = tipo.Nombre
-                                                             }).ToList();
-                return View(listaProductos);
-            }            
-            //return View(await _context.Productos.ToListAsync());
+        {           
+            
+            var productos = await _context.Productos.Include("TipoProducto").ToListAsync();
+
+                return View(productos);
         }
 
         // GET: Productos/Details/5
@@ -64,12 +52,11 @@ namespace ProyectoCRUD.Controllers
         // GET: Productos/Create
         public IActionResult Crear()
         {
+            ViewData["listaTipoProductos"] = new SelectList(_context.TipoProductos.ToList(), "TipoProductoId", "Nombre");
             return View();
         }
 
         // POST: Productos/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Crear([Bind("ProductoId,Nombre,TipoProductoId,Cantidad,Precio")] Producto producto)
@@ -80,6 +67,13 @@ namespace ProyectoCRUD.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            if (producto.TipoProductoId == 0)
+            {
+                ViewData["errorTipo"] = "Seleccione una opción";
+            }            
+
+            ViewData["listaTipoProductos"] = new SelectList(_context.TipoProductos.ToList(), "TipoProductoId", "Nombre");
             return View(producto);
         }
 
@@ -100,8 +94,6 @@ namespace ProyectoCRUD.Controllers
         }
 
         // POST: Productos/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Modificar(int id, [Bind("ProductoId,Nombre,TipoProductoId,Cantidad,Precio")] Producto producto)
@@ -154,24 +146,16 @@ namespace ProyectoCRUD.Controllers
             {
                 return NotFound();
             }
-
-            return View(producto);
-        }
-
-        // POST: Productos/Delete/5
-        [HttpPost, ActionName("Eliminar")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Confirmar(int id)
-        {
-            var producto = await _context.Productos.FindAsync(id);
+            
             _context.Productos.Remove(producto);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductoExists(int id)
         {
             return _context.Productos.Any(e => e.ProductoId == id);
-        }
+        }        
     }
 }
