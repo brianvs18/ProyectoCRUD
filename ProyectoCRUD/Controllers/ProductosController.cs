@@ -89,6 +89,7 @@ namespace ProyectoCRUD.Controllers
             {
                 return NotFound();
             }
+
             ViewData["listaTipoProductos"] = new SelectList(_productoServices.ObtenerListaTipoProductos(), "TipoProductoId", "Nombre");
             return View(producto);
         }
@@ -115,6 +116,7 @@ namespace ProyectoCRUD.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
+
             ViewData["listaTipoProductos"] = new SelectList(_productoServices.ObtenerListaTipoProductos(), "TipoProductoId", "Nombre");
             return View(producto);
         }
